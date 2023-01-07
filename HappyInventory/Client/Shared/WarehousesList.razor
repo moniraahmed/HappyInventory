@@ -1,0 +1,40 @@
+﻿@inject HttpClient Http
+@using HappyInventory.Shared
+
+<ul>
+    @foreach (var warehouse in warehouses)
+    {
+        <li>
+            <p>@warehouse.Name</p>
+            <p>@warehouse.Address</p>
+            <p>@warehouse.City</p>
+            <p>@warehouse.Country.Name</p>
+        </li>
+    }
+</ul>
+
+
+<ul>
+    @foreach (var role in roles)
+    {
+            <li>
+                <p>@role.Id</p>
+                <p>@role.Name</p>
+            </li>
+    }
+</ul>
+@code {
+    private static List<Warehouse> warehouses = new List<Warehouse>();
+    private static List<Role> roles = new List<Role>();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<List<Warehouse>>("api/Warehouse/warhouses");
+        if (result != null)
+            warehouses = result;
+
+        var allRoles = await Http.GetFromJsonAsync<List<Role>>("api/Warehouse/roles");
+        if (allRoles != null)
+            roles = allRoles;
+    }
+
+}
