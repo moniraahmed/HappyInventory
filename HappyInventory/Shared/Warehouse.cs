@@ -19,5 +19,6 @@ namespace HappyInventory.Shared
         [Required] public string City { get; set; } = string.Empty;
         public Country Country { get; set; } = new Country();
         public List<Item> Items { get; set; } = new List<Item>();
+
     }
 }

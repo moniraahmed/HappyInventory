@@ -1,40 +1,62 @@
-﻿@inject HttpClient Http
-@using HappyInventory.Shared
+﻿@inject IWarehouseService warehouseService
 
-<ul>
-    @foreach (var warehouse in warehouses)
+
+
+@if (warehouseService.Warehouses == null || warehouseService.Warehouses.Count == 0)
+{
+    <span>No data</span>
+}
+else
+{
+    <table class="table table-bordered">
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+            <th scope="col">
+                Address
+            </th>
+            <th scope="col">
+                City
+            </th>
+            <th scope="col">Country</th>
+            <th scope="col">Items</th>
+        </tr>
+
+        @foreach (var warehouse in warehouseService.Warehouses)
+        {
+            <tr>
+                <td>
+                    @warehouse.Name
+                </td>
+                <td>
+                    @warehouse.Address
+                </td>
+
+                <td>
+                    @warehouse.City
+                </td>
+                <td> @warehouse.Country.Name</td>
+                <td> <a href="/items/@warehouse.Id">Items</a></td>
+            </tr>
+        }
+    </table>
+    <a class="btn btn-primary" href="/add">Add a warehouse</a>
+ @*   if (warehouseService.TotalWarehouses > 10)
     {
-        <li>
-            <p>@warehouse.Name</p>
-            <p>@warehouse.Address</p>
-            <p>@warehouse.City</p>
-            <p>@warehouse.Country.Name</p>
-        </li>
-    }
-</ul>
+     //pageination
+    }*@
 
 
-<ul>
-    @foreach (var role in roles)
-    {
-            <li>
-                <p>@role.Id</p>
-                <p>@role.Name</p>
-            </li>
-    }
-</ul>
+
 @code {
-    private static List<Warehouse> warehouses = new List<Warehouse>();
-    private static List<Role> roles = new List<Role>();
+
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<List<Warehouse>>("api/Warehouse/warhouses");
-        if (result != null)
-            warehouses = result;
-
-        var allRoles = await Http.GetFromJsonAsync<List<Role>>("api/Warehouse/roles");
-        if (allRoles != null)
-            roles = allRoles;
+        await warehouseService.GetWarehousesAsync(1,10);
     }
+
+}
+
 
 }

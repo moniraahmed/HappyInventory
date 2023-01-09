@@ -1,0 +1,59 @@
+﻿@page "/items/{id:int}"
+@inject IItemService ItemService;
+
+@if (ItemService.Items == null || ItemService.Items.Count == 0)
+{
+    <span>No Items Yet...</span>
+}
+else
+{
+
+
+    <table class="table table-bordered">
+        <tr>
+
+            <th>
+               Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Cost
+            </th>
+            <th>MSRP Price</th>
+            <th>SKUCode</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in ItemService.Items)
+        {
+            <tr>
+                <td>
+                    <p>@item.Name</p>
+                </td>
+                <td>
+                    <p>@item.Qty</p>
+                </td>
+                        
+                <td>
+                    <p>@item.Cost</p>
+                </td>
+                <td> <p>@item.MSRPPrice</p></td>
+                <td> <p>@item.SKUCode</p></td>
+            </tr>
+        }
+    </table>
+
+}
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }   
+    protected override async Task OnParametersSetAsync()
+    {
+        await ItemService.GetWarehouseItemsAsync(id);
+    }
+
+}

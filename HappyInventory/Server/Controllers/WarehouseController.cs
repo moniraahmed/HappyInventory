@@ -1,8 +1,6 @@
-﻿using HappyInventory.Server.Data;
-using Microsoft.AspNetCore.Http;
+﻿using HappyInventory.Server.Service.WarehouseService;
+using HappyInventory.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace HappyInventory.Server.Controllers
 {
@@ -10,48 +8,49 @@ namespace HappyInventory.Server.Controllers
     [ApiController]
     public class WarehouseController : ControllerBase
     {
-        private readonly DataContext _context;
-        public WarehouseController(DataContext context)
+        private readonly IWarehouseService warehouseService;
+       
+        public WarehouseController(IWarehouseService warehouseService)
         {
-            _context = context;
+            this.warehouseService = warehouseService;
         }
         
-        private static List<Warehouse> warehouses = new List<Warehouse>
-        {
-           new Warehouse
-           {
-            Name = "warehouse1",
-            Address = "hhhhh",
-            City="cairo",
-            Country= new Country{ Id = 1 ,Name = "Egypt"},
-            Items = new List<Item>
-            {
-                new Item
-                {
-                    Name = "item1",
-                    Cost =100,
-                    Qty = 2,
-                    MSRPPrice = 22,
-                    SKUCode = "i22"
-                }
-            }
-           }
-        };
-
         [HttpGet]
-        [Route("warhouses")]
-        public async Task<IActionResult> GetWarehousesAsync()
+        [Route("warhouses/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetWarehousesAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(warehouses);
+            var result = await warehouseService.GetWarehousesAsync(pageNumber,pageSize);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("warhouses/add")]
+        public async Task<IActionResult> AddWarehouseAsync([FromBody] Warehouse warehouse)
+        {
+            var result = await warehouseService.AddWarehouse(warehouse);
+            return Ok(result);
+        }
+        [HttpPost]
+        [Route("warhouses/update")]
+        public async Task<IActionResult> UpdateWarehouseAsync([FromBody] Warehouse warehouse)
+        {
+            var result = await warehouseService.UpdateWarehouse(warehouse);
+            return Ok(result);
+        }
+        [HttpPost]
+        [Route("warhouses/delete")]
+        public async Task<IActionResult> DeleteWarehouseAsync(int Id)
+        {
+            var result = await warehouseService.DeleteWarehouse(Id);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("roles")]
         public async Task<IActionResult> GetRolesAsync()
         {
-           
-            var roles = await _context.Roles.ToListAsync();
-            return Ok(roles);
+            var result = await warehouseService.GetRolesAsync();
+            return Ok(result);
         }
     }
 }

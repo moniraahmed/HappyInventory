@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using HappyInventory.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace HappyInventory.Server.Data
 {

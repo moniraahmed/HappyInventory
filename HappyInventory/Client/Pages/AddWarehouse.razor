@@ -1,0 +1,84 @@
+﻿@page "/add"
+@inject WarehouseService warehouseService
+
+
+
+
+<h3>AddWarehouse</h3>
+
+@*<EditForm Model="warehouse" OnValidSubmit="CreateWarehouse">
+    <div class="form-field">
+        <label>Name</label>
+        <div>
+            <InputText @bind-Value="warehouse.Name" />
+        </div>
+    </div>
+    <div class="form-field">
+        <label>Address</label>
+        <div>
+            <InputTextArea @bind-Value="warehouse.Address" />
+        </div>
+    </div>
+    <div class="form-field">
+        <label>City</label>
+        <div>
+            <InputTextArea @bind-Value="warehouse.City" />
+        </div>
+    </div>
+        <div class="form-field">
+        <label>Country</label>
+        <div>
+            <select>
+                @foreach (var item in warehouseService.Countries)
+                {
+                    <option>item</option>
+                }
+            </select>
+        </div>
+    </div>
+</EditForm>*@
+<EditForm Model="warehouse">
+    
+    @* <div>
+        <label label-for="name">Name</label>
+        <div>
+            <InputText @bind-Value="warehouse.Name" />
+        </div>
+    </div>
+    <div>
+        <label>Address</label>
+        <div>
+            <InputTextArea @bind-Value="warehouse.Address" />
+        </div>
+    </div>
+    <div>
+        <label>City</label>
+        <div>
+            <InputTextArea @bind-Value="warehouse.City" />
+        </div>
+    </div>
+        <div>
+        <label>Country</label>
+        <div>
+            <select>
+                @foreach (var item in warehouseService.Countries)
+                {
+                    <option>item</option>
+                }
+            </select>
+        </div>
+    </div>*@
+</EditForm>
+
+@code {
+    Warehouse warehouse = new Warehouse();
+    async Task CreateWarehouse()
+    {
+
+        //await warehouseService.AddWarehousesAsync();
+    }
+    async Task GetCountries()
+    {
+        await warehouseService.GetCountries();
+    }
+}

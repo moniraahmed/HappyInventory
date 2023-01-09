@@ -24,5 +24,6 @@ namespace HappyInventory.Shared
         [Required]
         public Warehouse Warehouse { get; set; } = new Warehouse();
 
+
     }
 }
