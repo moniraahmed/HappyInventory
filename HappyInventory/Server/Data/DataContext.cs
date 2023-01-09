@@ -17,7 +17,7 @@ namespace HappyInventory.Server.Data
         }
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Item> Items { get; set; }  
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserModel> Users { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Role> Roles { get; set; }
 

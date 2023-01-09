@@ -1,7 +1,10 @@
-using HappyInventory.Server.Data;
-using HappyInventory.Server.Service.ItemService;
-using HappyInventory.Server.Service.WarehouseService;
+global using HappyInventory.Server.Data;
+global using HappyInventory.Server.Service.ItemService;
+global using HappyInventory.Server.Service.WarehouseService;
+using HappyInventory.Server.Service.AuthorizeService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,20 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddScoped<IWarehouseService,WarehouseService>();
 builder.Services.AddScoped<IItemService,ItemService>();
+builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey= true,
+        IssuerSigningKey =  
+        new SymmetricSecurityKey(System.Text.Encoding.UTF8.
+        GetBytes(builder.Configuration.GetSection("AppSetting:Token").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+
+    };
+});
 
 var app = builder.Build();
 app.UseSwaggerUI();
@@ -40,7 +57,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

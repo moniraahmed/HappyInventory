@@ -1,11 +1,13 @@
 ﻿using HappyInventory.Server.Service.WarehouseService;
 using HappyInventory.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappyInventory.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WarehouseController : ControllerBase
     {
         private readonly IWarehouseService warehouseService;
